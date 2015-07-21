@@ -1,22 +1,18 @@
 package com.grichardson.audioeffects;
 
 import android.annotation.TargetApi;
-import android.media.AudioAttributes;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.media.SoundPool;
 import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import com.musicg.wave.Wave;
+
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -24,87 +20,53 @@ public class MainActivity extends ActionBarActivity {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        InputStream sineInputStream = getResources().openRawResource(R.raw.x1);
+        InputStream impulseInputStream = getResources().openRawResource(R.raw.reverb_impulse);
 
-        InputStream beep = getResources().openRawResource(R.raw.beep);
+        Wave inputWave = new Wave(sineInputStream);
+        Wave impulseWave = new Wave(impulseInputStream);
 
-        byte[] music1 = null;
+        short[] inputShort = inputWave.getSampleAmplitudes();
+        short[] impulseShort = impulseWave.getSampleAmplitudes();
 
-        try {
-            music1 = convertStreamToByteArray(beep);
-            beep.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        float[] input = Util.ShortToFloat(inputShort);
+        float[] impulse = Util.ShortToFloat(impulseShort);
+
+        float[] output = Util.Convolve(input, impulse);
+//        float[] output = Effects.Vibrato(input, inputWave.getWaveHeader().getSampleRate());
+//        float[] output = Effects.Flanger(input, inputWave.getWaveHeader().getSampleRate());
+
+        playWave(output, inputWave.getWaveHeader().getSampleRate(), inputWave.getWaveHeader().getBitsPerSample());
+    }
+
+    private static void playWave(float[] wave, int sampleRate, int bitDepth) {
+
+        int encoding;
+        switch (bitDepth) {
+
+            case 8:
+                encoding = AudioFormat.ENCODING_PCM_8BIT;
+                break;
+
+            case 16:
+                encoding = AudioFormat.ENCODING_PCM_16BIT;
+                break;
+
+            default:
+                System.out.println("Error: Can only read wave with 8 or 16 bits per sample");
+                return;
         }
 
-//        short[] sineWave = generateSineWave(441, 1, 0, 44100, 4);
-        short[] signal = generateCScale(44100);
-        AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 44100, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, signal.length * 2, AudioTrack.MODE_STATIC);
-        audioTrack.write(signal, 0, signal.length);
+        // Convert wave to array of shorts
+        short[] waveShort = Util.FloatToShort(wave);
+
+        AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO, encoding, waveShort.length * 2, AudioTrack.MODE_STATIC);
+        audioTrack.write(waveShort, 0, waveShort.length);
         audioTrack.play();
-    }
-
-    private static short[] generateCScale(int sampleFrequency) {
-
-        int[] scale = {1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1};
-        float noteLength = 1;
-
-        short[] output = new short[0];
-
-        for (int i = 0; i < scale.length; i++) {
-
-            if (scale[i] == 1) {
-
-                double noteFrequency = 440f * Math.pow(2f, (i - 9f) / 12f);
-                short[] note = generateSineWave((float)noteFrequency, 1, 0, sampleFrequency, noteLength);
-
-                output = concat(output, note);
-            }
-        }
-
-        return output;
-    }
-
-    private static short[] generateSineWave(float frequency, float amplitude, float phase, int sampleFrequency, float duration) {
-
-        short[] output = new short[Math.round(sampleFrequency * duration)];
-
-        float samplePeriod = 1f / sampleFrequency;
-
-        for (int i = 0; i < output.length; i++) {
-            float sample = amplitude * (float) Math.sin(2 * Math.PI * frequency * i * samplePeriod - phase);
-            output[i] = (short) (sample * Short.MAX_VALUE);
-        }
-
-        return output;
-    }
-
-    private static short[] concat(short[] a, short[] b) {
-        int aLen = a.length;
-        int bLen = b.length;
-        short[] c = new short[aLen + bLen];
-        System.arraycopy(a, 0, c, 0, aLen);
-        System.arraycopy(b, 0, c, aLen, bLen);
-        return c;
-    }
-
-    private static byte[] convertStreamToByteArray(InputStream inputStream) throws IOException {
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-        byte[] buffer = new byte[10240];
-
-        int i = inputStream.read(buffer, 0, buffer.length);
-
-        while (i > 0) {
-
-            byteArrayOutputStream.write(buffer, 0, i);
-            i = inputStream.read(buffer, 0, buffer.length);
-        }
-
-        return byteArrayOutputStream.toByteArray();
     }
 
     @Override

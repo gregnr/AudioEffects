@@ -88,9 +88,11 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 22 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="musicg-1.4.2.0" level="project" />
+    <orderEntry type="library" exported="" name="JTransforms-3.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-22.2.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-22.2.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.2.0" level="project" />
-    <orderEntry type="library" exported="" name="commons-math-2.2" level="project" />
+    <orderEntry type="library" exported="" name="JLargeArrays-1.2" level="project" />
   </component>
 </module>
