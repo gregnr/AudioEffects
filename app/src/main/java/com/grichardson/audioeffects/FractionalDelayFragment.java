@@ -26,23 +26,14 @@ public class FractionalDelayFragment extends Fragment {
         layoutParams.weight = 100/3;
 
         delayKnob = new RoundKnobButtonDisplay(getActivity());
-//        delayKnob.setMinValue(0.5f);
-//        delayKnob.setMaxValue(3f);
-//        delayKnob.setValue(1.5f);
         delayKnob.setValueDisplayFormat("%.1f ms");
         delayKnob.setLabel(getString(R.string.delay));
 
         depthKnob = new RoundKnobButtonDisplay(getActivity());
-//        depthKnob.setMinValue(0.5f);
-//        depthKnob.setMaxValue(3f);
-//        depthKnob.setValue(1.5f);
         depthKnob.setValueDisplayFormat("%.1f ms");
         depthKnob.setLabel(getString(R.string.depth));
 
         modFreqKnob = new RoundKnobButtonDisplay(getActivity());
-//        modFreqKnob.setMinValue(3f);
-//        modFreqKnob.setMaxValue(15f);
-//        modFreqKnob.setValue(9f);
         modFreqKnob.setValueDisplayFormat("%.1f Hz");
         modFreqKnob.setLabel(getString(R.string.modulationFrequency));
 

@@ -140,6 +140,10 @@ public class RoundKnobButtonDisplay extends LinearLayout {
         labelTextView.setText(label);
     }
 
+    public void setTint(int tint) {
+        knob.setTint(tint);
+    }
+
     interface RoundKnobButtonDisplayListener {
         public void onStateChange(boolean newstate) ;
         public void onRotate(float value);

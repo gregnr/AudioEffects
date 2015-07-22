@@ -3,6 +3,7 @@ package com.grichardson.audioeffects;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -92,6 +93,7 @@ public class RoundKnobButton extends RelativeLayout implements OnGestureListener
         // create rotor
         ivRotor = new ImageView(context);
         ivRotor.setImageBitmap(bmpRotorOn);
+
         RelativeLayout.LayoutParams lp_ivKnob = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp_ivKnob.addRule(RelativeLayout.CENTER_IN_PARENT);
         addView(ivRotor, lp_ivKnob);
@@ -111,6 +113,9 @@ public class RoundKnobButton extends RelativeLayout implements OnGestureListener
         return (float) -Math.toDegrees(Math.atan2(x - 0.5f, y - 0.5f));
     }
 
+    public void setTint(int tint) {
+        ivRotor.setColorFilter(tint);
+    }
 
     @Override public boolean onTouchEvent(MotionEvent event) {
         if (gestureDetector.onTouchEvent(event)) return true;

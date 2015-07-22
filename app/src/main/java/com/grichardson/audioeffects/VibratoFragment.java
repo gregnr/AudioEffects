@@ -1,5 +1,6 @@
 package com.grichardson.audioeffects;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,17 +17,25 @@ public class VibratoFragment extends FractionalDelayFragment {
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
+        int color = 0xFFC5E9C5;
+        int tint = Color.argb(96, Color.red(color), Color.green(color), Color.blue(color));
+
+        view.setBackgroundColor(color);
+
         delayKnob.setMinValue(0.5f);
         delayKnob.setMaxValue(3f);
         delayKnob.setValue(1.5f);
+        delayKnob.setTint(tint);
 
         depthKnob.setMinValue(0.5f);
         depthKnob.setMaxValue(3f);
         depthKnob.setValue(1.5f);
+        depthKnob.setTint(tint);
 
         modFreqKnob.setMinValue(3f);
         modFreqKnob.setMaxValue(15f);
         modFreqKnob.setValue(9f);
+        modFreqKnob.setTint(tint);
 
         return view;
     }
