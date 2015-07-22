@@ -2,4 +2,12 @@
     <string name="app_name">Audio Effects</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="vibrato">Vibrato</string>
+    <string name="flanger">Flanger</string>
+
+    <string name="delay">Delay</string>
+    <string name="depth">Depth</string>
+    <string name="modulationFrequency">Modulation Frequency</string>
+
 </resources>

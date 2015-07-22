@@ -5,12 +5,20 @@ import java.util.Collections;
 
 public class Effects {
 
-    public static float[] Vibrato(float[] x, int fs) {
-        return FractionalDelay(x, fs, 0f, 1f, 0f, 0.0005f, 0.0005f, 9f);
+    // Default:
+    //     delay = 0.0005f
+    //     depth = 0.0005f
+    //     modulationFrequency = 9f
+    public static float[] Vibrato(float[] x, int fs, float delay, float depth, float modulationFrequency) {
+        return FractionalDelay(x, fs, 0f, 1f, 0f, delay, depth, modulationFrequency);
     }
 
-    public static float[] Flanger(float[] x, int fs) {
-        return FractionalDelay(x, fs, 0.7f, 0.7f, 0.7f, 0.002f, 0.002f, 0.2f);
+    // Default:
+    //     delay = 0.002f
+    //     depth = 0.002f
+    //     modulationFrequency = 0.2f
+    public static float[] Flanger(float[] x, int fs, float delay, float depth, float modulationFrequency) {
+        return FractionalDelay(x, fs, 0.7f, 0.7f, 0.7f, delay, depth, modulationFrequency);
     }
 
     private static float[] FractionalDelay(float[] x, int fs, float BL, float FF, float FB, float delay, float depth, float modFreq) {
