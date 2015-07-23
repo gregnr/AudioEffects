@@ -3,7 +3,6 @@ package com.grichardson.audioeffects;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;

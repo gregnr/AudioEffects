@@ -66,13 +66,18 @@ public class Effects {
             if (scale[i] == 1) {
 
                 double noteFrequency = 440f * Math.pow(2f, (i - 9f) / 12f);
-                float[] note = GenerateSineWave((float)noteFrequency, 1, 0, sampleFrequency, noteLength);
+                float[] note = GenerateSineWave((float) noteFrequency, sampleFrequency, noteLength);
 
                 output = Util.Concat(output, note);
             }
         }
 
         return output;
+    }
+
+    public static float[] GenerateSineWave(float frequency, int sampleFrequency, float duration) {
+
+        return GenerateSineWave(frequency, 1, 0, sampleFrequency, duration);
     }
 
     public static float[] GenerateSineWave(float frequency, float amplitude, float phase, int sampleFrequency, float duration) {

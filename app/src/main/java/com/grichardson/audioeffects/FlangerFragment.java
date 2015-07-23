@@ -26,17 +26,17 @@ public class FlangerFragment extends FractionalDelayFragment {
 
         delayKnob.setMinValue(2f);
         delayKnob.setMaxValue(30f);
-        delayKnob.setValue(15f);
+        delayKnob.setValue(2f);
         delayKnob.setTint(tint);
 
         depthKnob.setMinValue(2f);
         depthKnob.setMaxValue(30f);
-        depthKnob.setValue(15f);
+        depthKnob.setValue(2f);
         depthKnob.setTint(tint);
 
         modFreqKnob.setMinValue(0.2f);
         modFreqKnob.setMaxValue(3f);
-        modFreqKnob.setValue(1.5f);
+        modFreqKnob.setValue(0.2f);
         modFreqKnob.setTint(tint);
 
         return view;

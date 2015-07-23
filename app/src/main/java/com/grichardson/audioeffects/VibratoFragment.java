@@ -24,12 +24,12 @@ public class VibratoFragment extends FractionalDelayFragment {
 
         delayKnob.setMinValue(0.5f);
         delayKnob.setMaxValue(3f);
-        delayKnob.setValue(1.5f);
+        delayKnob.setValue(1f);
         delayKnob.setTint(tint);
 
         depthKnob.setMinValue(0.5f);
         depthKnob.setMaxValue(3f);
-        depthKnob.setValue(1.5f);
+        depthKnob.setValue(1f);
         depthKnob.setTint(tint);
 
         modFreqKnob.setMinValue(3f);

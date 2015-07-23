@@ -3,10 +3,9 @@ package com.grichardson.audioeffects;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.Gravity;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class RoundKnobButtonDisplay extends LinearLayout {
 
@@ -57,21 +56,25 @@ public class RoundKnobButtonDisplay extends LinearLayout {
         labelTextView.setGravity(Gravity.CENTER);
         labelTextView.setTypeface(labelTextView.getTypeface(), Typeface.BOLD);
 
-//        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-//        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         layoutParams.weight = 100/3;
-
-        RelativeLayout knobContainer = new RelativeLayout(context);
 
         addView(valueTextView, layoutParams);
         addView(knob, layoutParams);
         addView(labelTextView, layoutParams);
 
         setValueDisplayFormat(valueDisplayFormat);
-//        setValue(currentValue);
         setLabel(label);
+
+        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+
+                // Re-align the knob after it has been given a width and height
+                setValue(getValue());
+            }
+        });
     }
 
     public void setListener(RoundKnobButtonDisplayListener listener) {
