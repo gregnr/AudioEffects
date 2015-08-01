@@ -1,15 +1,20 @@
 package com.grichardson.audioeffects;
 
 import android.annotation.TargetApi;
+import android.content.res.AssetFileDescriptor;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.media.MediaCodec;
+import android.media.MediaExtractor;
+import android.media.MediaFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,8 +22,12 @@ import android.widget.Button;
 
 import com.musicg.wave.Wave;
 
-import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
 
+import java.io.FileDescriptor;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,10 +62,9 @@ public class MainActivity extends AppCompatActivity {
         short[] inputShort = inputWave.getSampleAmplitudes();
         short[] impulseShort = impulseWave.getSampleAmplitudes();
 
-        final float[] input = Util.ShortToFloat(inputShort);
-        final float[] impulse = Util.ShortToFloat(impulseShort);
+        final float[] input = Util.ShortsToFloatsNormalized(inputShort);
+        final float[] impulse = Util.ShortsToFloatsNormalized(impulseShort);
 
-        // Get play button
         Button play = (Button) findViewById(R.id.playButton);
         play.setOnClickListener(new View.OnClickListener() {
 
@@ -64,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 float[] output;
-//              output = Util.Convolve(input, impulse);
+//                output = Util.Convolve(input, impulse);
 
                 int currentIndex = viewPager.getCurrentItem();
                 switch (currentIndex) {
@@ -121,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Convert wave to array of shorts
-        short[] waveShort = Util.FloatToShort(wave);
+        short[] waveShort = Util.FloatsToShortsNormalized(wave);
 
         AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO, encoding, waveShort.length * 2, AudioTrack.MODE_STATIC);
         audioTrack.write(waveShort, 0, waveShort.length);

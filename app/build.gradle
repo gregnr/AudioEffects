@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "23.0.0 rc2"
+    buildToolsVersion "22.0.1"
 
     defaultConfig {
         applicationId "com.grichardson.audioeffects"
@@ -24,5 +24,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile "com.android.support:design:22.2.0"
     compile 'com.github.wendykierp:JTransforms:3.0'
+    compile 'commons-io:commons-io:2.4'
     compile files('libs/musicg-1.4.2.0.jar')
 }

@@ -2,7 +2,30 @@ package com.grichardson.audioeffects;
 
 import org.jtransforms.fft.FloatFFT_1D;
 
+import java.nio.ByteBuffer;
+
 public class Util {
+
+    public static float[] GetAudioSamples(byte[] bytes, int bitDepth) throws Exception {
+
+        float[] samples;
+
+        switch (bitDepth) {
+
+            case 8:
+                samples = Util.BytesToFloatsNormalized(bytes);
+                break;
+
+            case 16:
+                samples = Util.ShortsToFloatsNormalized(Util.BytesToShorts(bytes));
+                break;
+
+            default:
+                throw new Exception("Only 8 or 16 bit samples supported");
+        }
+
+        return samples;
+    }
 
     public static float[] Convolve(float[] x, float[] h) {
 
@@ -87,7 +110,31 @@ public class Util {
         return output;
     }
 
-    public static float[] ShortToFloat(short[] x) {
+    // This will combine and shift bytes into shorts (half as many shorts as bytes)
+    public static short[] BytesToShorts(byte[] x) {
+
+        short[] output = new short[x.length / 2];
+
+        ByteBuffer byteBuffer = ByteBuffer.wrap(x);
+        for (int i = 0; i < output.length; i++) {
+            output[i] = byteBuffer.getShort();
+        }
+
+        return output;
+    }
+
+    public static float[] BytesToFloatsNormalized(byte[] x) {
+
+        float[] output = new float[x.length];
+
+        for (int i = 0; i < output.length; i++) {
+            output[i] = (float) x[i] / (float) Byte.MAX_VALUE;
+        }
+
+        return output;
+    }
+
+    public static float[] ShortsToFloatsNormalized(short[] x) {
 
         float[] output = new float[x.length];
 
@@ -98,7 +145,7 @@ public class Util {
         return output;
     }
 
-    public static short[] FloatToShort(float[] x) {
+    public static short[] FloatsToShortsNormalized(float[] x) {
 
         short[] output = new short[x.length];
 
@@ -140,15 +187,6 @@ public class Util {
         }
 
         return output;
-    }
-
-    public static short[] Concat(short[] a, short[] b) {
-        int aLen = a.length;
-        int bLen = b.length;
-        short[] c = new short[aLen + bLen];
-        System.arraycopy(a, 0, c, 0, aLen);
-        System.arraycopy(b, 0, c, aLen, bLen);
-        return c;
     }
 
     public static float[] Concat(float[] a, float[] b) {

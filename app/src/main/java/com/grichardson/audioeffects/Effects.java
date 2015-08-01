@@ -2,6 +2,7 @@ package com.grichardson.audioeffects;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 public class Effects {
 
@@ -52,6 +53,19 @@ public class Effects {
         }
 
         return y;
+    }
+
+    public static float[] GenerateGaussianNoise(float mean, float variance, int sampleFrequency, float duration) {
+
+        Random r = new Random();
+
+        float[] output = new float[Math.round(sampleFrequency * duration)];
+
+        for (int i = 0; i < output.length; i++) {
+            output[i] = (float)(r.nextGaussian() * Math.sqrt(variance) + mean);
+        }
+
+        return output;
     }
 
     public static float[] GenerateCScale(int sampleFrequency) {
