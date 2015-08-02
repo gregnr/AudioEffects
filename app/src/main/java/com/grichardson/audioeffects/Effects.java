@@ -16,7 +16,7 @@ public class Effects {
 
     public static float[] Chorus(float[] x, int fs, float delay, float depth) {
 
-        float[] lowPassNoise = Util.LowPassFilter(Effects.GenerateGaussianNoise(0, 0.707f, 44100, x.length), 5000);
+        float[] lowPassNoise = Util.LowPassFilter(Effects.GenerateGaussianNoise(0, 0.707f, x.length), 5000);
 
         return Chorus(x, fs, delay, depth, lowPassNoise);
     }
@@ -27,7 +27,7 @@ public class Effects {
 
     public static float[] Doubling(float[] x, int fs, float delay, float depth) {
 
-        float[] lowPassNoise = Util.LowPassFilter(Effects.GenerateGaussianNoise(0, 0.707f, 44100, x.length), 5000);
+        float[] lowPassNoise = Util.LowPassFilter(Effects.GenerateGaussianNoise(0, 0.707f, x.length), 5000);
 
         return Doubling(x, fs, delay, depth, lowPassNoise);
     }
@@ -77,10 +77,10 @@ public class Effects {
 
     public static float[] GenerateGaussianNoise(float mean, float variance, int sampleFrequency, float duration) {
 
-        return GenerateGaussianNoise(mean, variance, sampleFrequency, Math.round(sampleFrequency * duration));
+        return GenerateGaussianNoise(mean, variance, Math.round(sampleFrequency * duration));
     }
 
-    public static float[] GenerateGaussianNoise(float mean, float variance, int sampleFrequency, int numberSamples) {
+    public static float[] GenerateGaussianNoise(float mean, float variance, int numberSamples) {
 
         Random r = new Random();
 
