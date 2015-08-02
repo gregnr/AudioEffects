@@ -1,5 +1,6 @@
 package com.grichardson.audioeffects;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,7 +12,8 @@ public class FractionalDelayFragment extends Fragment {
 
     protected RoundKnobButtonDisplay delayKnob;
     protected RoundKnobButtonDisplay depthKnob;
-    protected RoundKnobButtonDisplay modFreqKnob;
+
+    protected int numberOfControls = 2;
 
     public FractionalDelayFragment() {
     }
@@ -22,8 +24,7 @@ public class FractionalDelayFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        layoutParams.weight = 100/3;
+        LinearLayout.LayoutParams layoutParams = getLayoutParams();
 
         delayKnob = new RoundKnobButtonDisplay(getActivity());
         delayKnob.setValueDisplayFormat("%.1f ms");
@@ -33,13 +34,8 @@ public class FractionalDelayFragment extends Fragment {
         depthKnob.setValueDisplayFormat("%.1f ms");
         depthKnob.setLabel(getString(R.string.depth));
 
-        modFreqKnob = new RoundKnobButtonDisplay(getActivity());
-        modFreqKnob.setValueDisplayFormat("%.1f Hz");
-        modFreqKnob.setLabel(getString(R.string.modulationFrequency));
-
         ((LinearLayout)view).addView(delayKnob, layoutParams);
         ((LinearLayout)view).addView(depthKnob, layoutParams);
-        ((LinearLayout)view).addView(modFreqKnob, layoutParams);
 
         // Enforce rule where depth cannot be greater than delay
         delayKnob.setListener(new RoundKnobButtonDisplay.RoundKnobButtonDisplayListener() {
@@ -110,22 +106,6 @@ public class FractionalDelayFragment extends Fragment {
         depthKnob.setMaxValue(maxDepthValue);
     }
 
-    public float getMinModFreqValue() {
-        return modFreqKnob.getMinValue();
-    }
-
-    public void setMinModFreqValue(float minModFreqValue) {
-        modFreqKnob.setMinValue(minModFreqValue);
-    }
-
-    public float getMaxModFreqValue() {
-        return modFreqKnob.getMaxValue();
-    }
-
-    public void setMaxModFreqValue(float maxModFreqValue) {
-        modFreqKnob.setMaxValue(maxModFreqValue);
-    }
-
     public float getDelayValue() {
         System.out.println(delayKnob);
         return delayKnob.getValue() / 1000;
@@ -135,7 +115,11 @@ public class FractionalDelayFragment extends Fragment {
         return depthKnob.getValue() / 1000;
     }
 
-    public float getModulationFrequencyValue() {
-        return modFreqKnob.getValue();
+    protected LinearLayout.LayoutParams getLayoutParams() {
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        layoutParams.weight = 100f / numberOfControls;
+
+        return layoutParams;
     }
 }

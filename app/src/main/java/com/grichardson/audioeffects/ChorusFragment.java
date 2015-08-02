@@ -32,11 +32,6 @@ public class ChorusFragment extends FractionalDelayFragment {
         depthKnob.setValue(15f);
         depthKnob.setTint(tint);
 
-        modFreqKnob.setMinValue(0.2f);
-        modFreqKnob.setMaxValue(3f);
-        modFreqKnob.setValue(0.2f);
-        modFreqKnob.setTint(tint);
-
         return view;
     }
 }

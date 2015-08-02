@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-public class FlangerFragment extends FractionalDelayFragment {
+public class FlangerFragment extends FractionalDelayModFragment {
 
     public FlangerFragment() {
     }

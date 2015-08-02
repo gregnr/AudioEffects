@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class VibratoFragment extends FractionalDelayFragment {
+public class VibratoFragment extends FractionalDelayModFragment {
 
     public VibratoFragment() {
     }
