@@ -99,12 +99,27 @@ public class Util {
         return max;
     }
 
-    private static float[] Normalize(float[] a, float max) {
+    public static float[] Normalize(float[] a, float max) {
 
         float[] output = new float[a.length];
 
         for (int i = 0; i < output.length; i++) {
             output[i] = a[i] / max;
+        }
+
+        return output;
+    }
+
+    // smoothing: the strength of the smoothing filter; 1=no change, larger values smoothes more
+    public static float[] LowPassFilter(float[] x, float smoothing){
+
+        float[] output = new float[x.length];
+        float value = x[0];
+
+        for (int i = 1; i < x.length; i++) {
+
+            value += (x[i] - value) / smoothing;
+            output[i] = value;
         }
 
         return output;

@@ -13,6 +13,8 @@ public class AudioEffectPagerAdapter extends FragmentStatePagerAdapter {
 
     public static final int VIBRATO = 0;
     public static final int FLANGER = 1;
+    public static final int CHORUS = 2;
+    public static final int DOUBLING = 3;
 
     private Context context;
     private Map<Integer, Fragment> fragments = new HashMap<>();
@@ -44,6 +46,20 @@ public class AudioEffectPagerAdapter extends FragmentStatePagerAdapter {
 
                 return flangerFragment;
 
+            case CHORUS:
+
+                Fragment chorusFragment = new ChorusFragment();
+                fragments.put(i, chorusFragment);
+
+                return chorusFragment;
+
+            case DOUBLING:
+
+                Fragment doublingFragment = new DoublingFragment();
+                fragments.put(i, doublingFragment);
+
+                return doublingFragment;
+
             default:
                 return null;
         }
@@ -51,7 +67,7 @@ public class AudioEffectPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return 4;
     }
 
     @Override
@@ -62,6 +78,10 @@ public class AudioEffectPagerAdapter extends FragmentStatePagerAdapter {
                 return context.getString(R.string.vibrato);
             case FLANGER:
                 return context.getString(R.string.flanger);
+            case CHORUS:
+                return context.getString(R.string.chorus);
+            case DOUBLING:
+                return context.getString(R.string.doubling);
             default:
                 return "";
         }

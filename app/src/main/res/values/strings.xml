@@ -5,6 +5,8 @@
 
     <string name="vibrato">Vibrato</string>
     <string name="flanger">Flanger</string>
+    <string name="chorus">Chorus</string>
+    <string name="doubling">Doubling</string>
 
     <string name="delay">Delay</string>
     <string name="depth">Depth</string>

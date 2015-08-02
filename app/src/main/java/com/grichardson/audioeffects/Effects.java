@@ -6,29 +6,49 @@ import java.util.Random;
 
 public class Effects {
 
-    // Default:
-    //     delay = 0.0005f
-    //     depth = 0.0005f
-    //     modulationFrequency = 9f
     public static float[] Vibrato(float[] x, int fs, float delay, float depth, float modulationFrequency) {
         return FractionalDelay(x, fs, 0f, 1f, 0f, delay, depth, modulationFrequency);
     }
 
-    // Default:
-    //     delay = 0.002f
-    //     depth = 0.002f
-    //     modulationFrequency = 0.2f
     public static float[] Flanger(float[] x, int fs, float delay, float depth, float modulationFrequency) {
         return FractionalDelay(x, fs, 0.7f, 0.7f, 0.7f, delay, depth, modulationFrequency);
     }
 
-    private static float[] FractionalDelay(float[] x, int fs, float BL, float FF, float FB, float delay, float depth, float modFreq) {
+    public static float[] Chorus(float[] x, int fs, float delay, float depth) {
+
+        float[] lowPassNoise = Util.LowPassFilter(Effects.GenerateGaussianNoise(0, 0.707f, 44100, x.length), 5000);
+
+        return Chorus(x, fs, delay, depth, lowPassNoise);
+    }
+
+    public static float[] Chorus(float[] x, int fs, float delay, float depth, float[] modulationSignal) {
+        return FractionalDelay(x, fs, 0.7f, 1f, -0.7f, delay, depth, modulationSignal);
+    }
+
+    public static float[] Doubling(float[] x, int fs, float delay, float depth) {
+
+        float[] lowPassNoise = Util.LowPassFilter(Effects.GenerateGaussianNoise(0, 0.707f, 44100, x.length), 5000);
+
+        return Doubling(x, fs, delay, depth, lowPassNoise);
+    }
+
+    public static float[] Doubling(float[] x, int fs, float delay, float depth, float[] modulationSignal) {
+        return FractionalDelay(x, fs, 0.7f, 0.7f, 0f, delay, depth, modulationSignal);
+    }
+
+    private static float[] FractionalDelay(float[] x, int fs, float BL, float FF, float FB, float delay, float depth, float modulationFrequency) {
+
+        float[] modulationSignal = GenerateSineWave(modulationFrequency, fs, x.length);
+
+        return FractionalDelay(x, fs, BL, FF, FB, delay, depth, modulationSignal);
+    }
+
+    private static float[] FractionalDelay(float[] x, int fs, float BL, float FF, float FB, float delay, float depth, float[] modulationSignal) {
 
         float[] y = new float[x.length];
 
         int delaySamples = Math.round(delay * fs); // basic delay in # samples
         int depthSamples = Math.round(depth * fs); // modulation depth (width) in # samples
-        float modFreqSamples = modFreq/fs; // modulation frequency in 1 / # samples
 
         int delayLineSamples = 2 + delaySamples + depthSamples*2; // length of the entire delay
 
@@ -36,7 +56,7 @@ public class Effects {
 
         for (int i = 0; i < x.length; i++) {
 
-            float modulationValue = depthSamples * (float) Math.sin(modFreqSamples*2*Math.PI*i);
+            float modulationValue = depthSamples * modulationSignal[i];
 
             float pointer = delaySamples + modulationValue;
             int roundedPointer = (int) Math.floor(pointer);
@@ -57,9 +77,14 @@ public class Effects {
 
     public static float[] GenerateGaussianNoise(float mean, float variance, int sampleFrequency, float duration) {
 
+        return GenerateGaussianNoise(mean, variance, sampleFrequency, Math.round(sampleFrequency * duration));
+    }
+
+    public static float[] GenerateGaussianNoise(float mean, float variance, int sampleFrequency, int numberSamples) {
+
         Random r = new Random();
 
-        float[] output = new float[Math.round(sampleFrequency * duration)];
+        float[] output = new float[numberSamples];
 
         for (int i = 0; i < output.length; i++) {
             output[i] = (float)(r.nextGaussian() * Math.sqrt(variance) + mean);
@@ -89,14 +114,19 @@ public class Effects {
         return output;
     }
 
-    public static float[] GenerateSineWave(float frequency, int sampleFrequency, float duration) {
+    public static float[] GenerateSineWave(float frequency, int sampleFrequency, int numberSamples) {
 
-        return GenerateSineWave(frequency, 1, 0, sampleFrequency, duration);
+        return GenerateSineWave(frequency, 1, 0, sampleFrequency, numberSamples);
     }
 
-    public static float[] GenerateSineWave(float frequency, float amplitude, float phase, int sampleFrequency, float duration) {
+    public static float[] GenerateSineWave(float frequency, int sampleFrequency, float duration) {
 
-        float[] output = new float[Math.round(sampleFrequency * duration)];
+        return GenerateSineWave(frequency, 1, 0, sampleFrequency, Math.round(sampleFrequency * duration));
+    }
+
+    public static float[] GenerateSineWave(float frequency, float amplitude, float phase, int sampleFrequency, int numberSamples) {
+
+        float[] output = new float[numberSamples];
 
         float samplePeriod = 1f / sampleFrequency;
 

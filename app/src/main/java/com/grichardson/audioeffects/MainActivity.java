@@ -1,20 +1,15 @@
 package com.grichardson.audioeffects;
 
 import android.annotation.TargetApi;
-import android.content.res.AssetFileDescriptor;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.media.MediaCodec;
-import android.media.MediaExtractor;
-import android.media.MediaFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,12 +17,7 @@ import android.widget.Button;
 
 import com.musicg.wave.Wave;
 
-import org.apache.commons.io.IOUtils;
-
-import java.io.FileDescriptor;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -98,6 +88,28 @@ public class MainActivity extends AppCompatActivity {
                         float flangerModulationFrequency = flangerFragment.getModulationFrequencyValue();
 
                         output = Effects.Flanger(input, inputWave.getWaveHeader().getSampleRate(), flangerDelay, flangerDepth, flangerModulationFrequency);
+
+                        break;
+
+                    case AudioEffectPagerAdapter.CHORUS:
+
+                        ChorusFragment chorusFragment = (ChorusFragment) audioEffectPagerAdapter.getFragment(currentIndex);
+
+                        float chorusDelay = chorusFragment.getDelayValue();
+                        float chorusDepth = chorusFragment.getDepthValue();
+
+                        output = Effects.Chorus(input, inputWave.getWaveHeader().getSampleRate(), chorusDelay, chorusDepth);
+
+                        break;
+
+                    case AudioEffectPagerAdapter.DOUBLING:
+
+                        DoublingFragment doublingFragment = (DoublingFragment) audioEffectPagerAdapter.getFragment(currentIndex);
+
+                        float doublingDelay = doublingFragment.getDelayValue();
+                        float doublingDepth = doublingFragment.getDepthValue();
+
+                        output = Effects.Doubling(input, inputWave.getWaveHeader().getSampleRate(), doublingDelay, doublingDepth);
 
                         break;
 
